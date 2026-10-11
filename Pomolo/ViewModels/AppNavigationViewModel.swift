@@ -36,6 +36,7 @@ public final class AppNavigationViewModel: ObservableObject {
     @Published public var isShowingQuickAdd: Bool = false
     @Published public var isShowingSoundscapes: Bool = false
     @Published public var isShowingStreakSheet: Bool = false
+    @Published public var isShowingLoginSheet: Bool = false
     
     public init() {
         if !hasCompletedOnboarding {

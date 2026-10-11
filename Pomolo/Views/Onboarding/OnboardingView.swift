@@ -64,12 +64,21 @@ public struct OnboardingView: View {
                 
                 Spacer()
                 
-                Button("Skip") {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    navViewModel.completeOnboarding()
+                HStack(spacing: 16) {
+                    Button("Log In") {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        navViewModel.isShowingLoginSheet = true
+                    }
+                    .font(PomoloTypography.headlineSmall(15))
+                    .foregroundColor(Color.pomoloOrange)
+                    
+                    Button("Skip") {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        navViewModel.completeOnboarding()
+                    }
+                    .font(PomoloTypography.headlineSmall(15))
+                    .foregroundColor(Color.pomoloTextSecondary)
                 }
-                .font(PomoloTypography.headlineSmall(15))
-                .foregroundColor(Color.pomoloTextSecondary)
             }
             .padding(.horizontal, 20)
             .padding(.top, 16)
@@ -183,5 +192,11 @@ public struct OnboardingView: View {
             .padding(.bottom, 24)
         }
         .background(Color.pomoloCanvas.ignoresSafeArea())
+        .sheet(isPresented: $navViewModel.isShowingLoginSheet) {
+            LoginView(onLoginSuccess: {
+                navViewModel.isShowingLoginSheet = false
+                navViewModel.completeOnboarding()
+            })
+        }
     }
 }

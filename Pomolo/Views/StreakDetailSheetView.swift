@@ -65,12 +65,33 @@ public struct StreakDetailSheetView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 22))
-                            .foregroundColor(Color.pomoloTextSecondary.opacity(0.6))
+                    HStack(spacing: 12) {
+                        Menu {
+                            Section {
+                                Label("Lonath Gunawardena", systemImage: "person.crop.circle.fill")
+                                Label(AuthViewModel.shared.userEmail.isEmpty ? AuthViewModel.hardcodedEmail : AuthViewModel.shared.userEmail, systemImage: "envelope.fill")
+                            }
+                            Section {
+                                Button(role: .destructive) {
+                                    dismiss()
+                                    AuthViewModel.shared.signOut()
+                                } label: {
+                                    Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis.circle.fill")
+                                .font(.system(size: 22))
+                                .foregroundColor(Color.pomoloTextSecondary.opacity(0.6))
+                        }
+                        
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 22))
+                                .foregroundColor(Color.pomoloTextSecondary.opacity(0.6))
+                        }
                     }
                 }
             }

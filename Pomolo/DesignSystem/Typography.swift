@@ -30,6 +30,14 @@ public struct PomoloTypography {
         .system(size: size, weight: .bold, design: .default)
     }
     
+    public static func caption(_ size: CGFloat = 12) -> Font {
+        .system(size: size, weight: .regular, design: .default)
+    }
+    
+    public static func footnote(_ size: CGFloat = 13) -> Font {
+        .system(size: size, weight: .regular, design: .default)
+    }
+    
     public static func timerDigits(_ size: CGFloat = 46) -> Font {
         .system(size: size, weight: .heavy, design: .rounded).monospacedDigit()
     }

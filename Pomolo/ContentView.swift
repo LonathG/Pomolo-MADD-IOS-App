@@ -3,6 +3,7 @@ import SwiftUI
 /// Main application root view managing NavigationStack routing, bottom navigation bar, and streak HUD
 public struct ContentView: View {
     @StateObject private var navViewModel = AppNavigationViewModel()
+    @StateObject private var authViewModel = AuthViewModel.shared
     @State private var showingQuickAddSheet = false
     @State private var quickTaskTitle = ""
     @State private var selectedQuadrant: MatrixQuadrant = .q1
@@ -15,13 +16,23 @@ public struct ContentView: View {
     public init() {}
     
     public var body: some View {
-        NavigationStack(path: $navViewModel.navigationPath) {
-            ZStack(alignment: .bottom) {
-                // Main Content View Router
-                Group {
-                    if !navViewModel.hasCompletedOnboarding {
-                        OnboardingView()
-                    } else {
+        Group {
+            if !authViewModel.isAuthenticated {
+                LoginView(
+                    viewModel: authViewModel,
+                    onLoginSuccess: {
+                        // Seamless transition to matrix dashboard
+                    },
+                    onNavigateToSignUp: {
+                        navViewModel.hasCompletedOnboarding = false
+                    }
+                )
+            } else if !navViewModel.hasCompletedOnboarding {
+                OnboardingView()
+            } else {
+                NavigationStack(path: $navViewModel.navigationPath) {
+                    ZStack(alignment: .bottom) {
+                        // Main Content View Router
                         VStack(spacing: 0) {
                             // Unified App Header
                             appHeaderView
@@ -38,10 +49,8 @@ public struct ContentView: View {
                                 OnboardingView()
                             }
                         }
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.pomoloCanvas.ignoresSafeArea())
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.pomoloCanvas.ignoresSafeArea())
                 
                 // Floating Streak & Bottom Tab Bar (Visible when onboarding completed)
                 if navViewModel.hasCompletedOnboarding {
@@ -90,8 +99,11 @@ public struct ContentView: View {
                 quickAddTaskSheet
             }
         }
-        .environmentObject(navViewModel)
     }
+}
+.environmentObject(navViewModel)
+.environmentObject(authViewModel)
+}
     
     // MARK: - App Header
     private var appHeaderView: some View {
@@ -141,10 +153,37 @@ public struct ContentView: View {
                 }
                 .buttonStyle(ScaleButtonStyle())
                 
-                // Profile Avatar Button
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    navViewModel.isShowingStreakSheet = true
+                // Profile Avatar Menu with Logout
+                Menu {
+                    Section {
+                        Label("Lonath Gunawardena", systemImage: "person.crop.circle.fill")
+                        Label(authViewModel.userEmail.isEmpty ? AuthViewModel.hardcodedEmail : authViewModel.userEmail, systemImage: "envelope.fill")
+                        Label("Level 5 • Top 1% Focus Tier", systemImage: "rosette")
+                    }
+                    
+                    Section {
+                        Button {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            navViewModel.isShowingStreakSheet = true
+                        } label: {
+                            Label("Streak & Rewards (7 Days)", systemImage: "flame.fill")
+                        }
+                        
+                        Button {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            navViewModel.hasCompletedOnboarding = false
+                        } label: {
+                            Label("Replay Onboarding", systemImage: "sparkles")
+                        }
+                    }
+                    
+                    Section {
+                        Button(role: .destructive) {
+                            authViewModel.signOut()
+                        } label: {
+                            Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
+                        }
+                    }
                 } label: {
                     Image(systemName: "person.fill")
                         .font(.system(size: 14, weight: .semibold))

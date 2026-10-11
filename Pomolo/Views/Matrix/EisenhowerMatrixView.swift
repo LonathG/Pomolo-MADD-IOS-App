@@ -34,59 +34,24 @@ public struct EisenhowerMatrixView: View {
                     
                     Spacer()
                     
-                    // Quick Actions HUD
-                    HStack(spacing: 6) {
-                        // AI Balance Button
-                        Button {
-                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                            viewModel.applyAIBalanceRecommendation()
-                        } label: {
-                            HStack(spacing: 4) {
-                                Image(systemName: "sparkles")
-                                    .font(.system(size: 11, weight: .bold))
-                                Text("Balance")
-                                    .font(PomoloTypography.labelCaps(10))
-                            }
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 10)
-                            .frame(height: 32)
-                            .background(Color.pomoloOrange)
-                            .clipShape(Capsule())
-                            .shadow(color: Color.pomoloOrange.opacity(0.3), radius: 6, x: 0, y: 2)
+                    // AI Balance Button
+                    Button {
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        viewModel.applyAIBalanceRecommendation()
+                    } label: {
+                        HStack(spacing: 5) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 11, weight: .bold))
+                            Text("Balance")
+                                .font(PomoloTypography.labelCaps(11))
                         }
-                        
-                        // Grid / List Toggle
-                        HStack(spacing: 2) {
-                            Button {
-                                withAnimation(.spring(response: 0.25)) { viewModel.isGridView = true }
-                            } label: {
-                                Image(systemName: "square.grid.2x2")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundColor(viewModel.isGridView ? Color.pomoloTextPrimary : Color.pomoloTextSecondary.opacity(0.5))
-                                    .frame(width: 28, height: 28)
-                                    .background(viewModel.isGridView ? Color.pomoloCard : Color.clear)
-                                    .clipShape(Circle())
-                            }
-                            
-                            Button {
-                                withAnimation(.spring(response: 0.25)) { viewModel.isGridView = false }
-                            } label: {
-                                Image(systemName: "list.bullet")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundColor(!viewModel.isGridView ? Color.pomoloTextPrimary : Color.pomoloTextSecondary.opacity(0.5))
-                                    .frame(width: 28, height: 28)
-                                    .background(!viewModel.isGridView ? Color.pomoloCard : Color.clear)
-                                    .clipShape(Circle())
-                            }
-                        }
-                        .padding(2)
-                        .background(Color.pomoloCardSecondary)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 12)
+                        .frame(height: 32)
+                        .background(Color.pomoloOrange)
                         .clipShape(Capsule())
+                        .shadow(color: Color.pomoloOrange.opacity(0.3), radius: 6, x: 0, y: 2)
                     }
-                    .padding(4)
-                    .background(Color.pomoloCard)
-                    .clipShape(Capsule())
-                    .overlay(Capsule().stroke(Color.pomoloBorder, lineWidth: 1))
                 }
                 .padding(.horizontal, 4)
                 
@@ -132,20 +97,11 @@ public struct EisenhowerMatrixView: View {
                 }
                 
                 // 2x2 Eisenhower Quadrants Canvas
-                if viewModel.isGridView {
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)], spacing: 14) {
-                        QuadrantDropZoneView(quadrant: .q1, tasks: viewModel.q1Tasks, viewModel: viewModel)
-                        QuadrantDropZoneView(quadrant: .q2, tasks: viewModel.q2Tasks, viewModel: viewModel)
-                        QuadrantDropZoneView(quadrant: .q3, tasks: viewModel.q3Tasks, viewModel: viewModel)
-                        QuadrantDropZoneView(quadrant: .q4, tasks: viewModel.q4Tasks, viewModel: viewModel)
-                    }
-                } else {
-                    VStack(spacing: 14) {
-                        QuadrantDropZoneView(quadrant: .q1, tasks: viewModel.q1Tasks, viewModel: viewModel)
-                        QuadrantDropZoneView(quadrant: .q2, tasks: viewModel.q2Tasks, viewModel: viewModel)
-                        QuadrantDropZoneView(quadrant: .q3, tasks: viewModel.q3Tasks, viewModel: viewModel)
-                        QuadrantDropZoneView(quadrant: .q4, tasks: viewModel.q4Tasks, viewModel: viewModel)
-                    }
+                LazyVGrid(columns: [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)], spacing: 14) {
+                    QuadrantDropZoneView(quadrant: .q1, tasks: viewModel.q1Tasks, viewModel: viewModel)
+                    QuadrantDropZoneView(quadrant: .q2, tasks: viewModel.q2Tasks, viewModel: viewModel)
+                    QuadrantDropZoneView(quadrant: .q3, tasks: viewModel.q3Tasks, viewModel: viewModel)
+                    QuadrantDropZoneView(quadrant: .q4, tasks: viewModel.q4Tasks, viewModel: viewModel)
                 }
                 
                 // Micro Focus Metrics Deck (Bottom Bar Card)

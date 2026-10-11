@@ -164,4 +164,27 @@ public extension Color {
     static let pomoloQ2 = Color(hex: hexQuadrantQ2)
     static let pomoloQ3 = Color(hex: hexQuadrantQ3)
     static let pomoloQ4 = Color(hex: hexQuadrantQ4)
+    
+    // MARK: - SSO Button Color Tokens
+    /// Adaptive Sign in with Apple background: Charcoal (#2A2A2A) in Light, White (#FFFFFF) in Dark.
+    static var pomoloAppleBackground: Color {
+        #if canImport(UIKit)
+        Color(uiColor: UIColor { trait in
+            trait.userInterfaceStyle == .dark ? .white : UIColor(hex: hexCharcoal)
+        })
+        #else
+        Color(hex: hexCharcoal)
+        #endif
+    }
+    
+    /// Adaptive Sign in with Apple foreground: White in Light, Obsidian Canvas in Dark.
+    static var pomoloAppleForeground: Color {
+        #if canImport(UIKit)
+        Color(uiColor: UIColor { trait in
+            trait.userInterfaceStyle == .dark ? UIColor(hex: hexCanvasDark) : .white
+        })
+        #else
+        Color.white
+        #endif
+    }
 }
