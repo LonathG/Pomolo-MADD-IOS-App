@@ -110,14 +110,12 @@ public struct ContentView: View {
         HStack(spacing: 12) {
             // App Branding & Screen Tag
             HStack(spacing: 10) {
-                ZStack {
-                    Circle()
-                        .fill(Color.pomoloOrange.opacity(0.15))
-                        .frame(width: 36, height: 36)
-                    Image(systemName: "timer")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(Color.pomoloOrange)
-                }
+                Image("PomoloLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 36, height: 36)
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.06), radius: 4, x: 0, y: 2)
                 
                 VStack(alignment: .leading, spacing: 1) {
                     Text("Pomolo")

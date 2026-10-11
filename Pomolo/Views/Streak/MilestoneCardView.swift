@@ -135,16 +135,12 @@ public struct MilestoneCardView: View {
                 // 1. Header: Clean Brand Mark & Status
                 HStack {
                     HStack(spacing: 8) {
-                        ZStack {
-                            Circle()
-                                .fill(Color(hex: "#FFF4EB"))
-                                .frame(width: 32, height: 32)
-                                .overlay(Circle().stroke(Color.pomoloPeach.opacity(0.6), lineWidth: 1))
-                            
-                            Image(systemName: "timer")
-                                .font(.system(size: 15, weight: .bold))
-                                .foregroundColor(Color.pomoloOrange)
-                        }
+                        Image("PomoloLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                            .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 2)
                         
                         Text("Pomolo")
                             .font(PomoloTypography.headlineSmall(18))

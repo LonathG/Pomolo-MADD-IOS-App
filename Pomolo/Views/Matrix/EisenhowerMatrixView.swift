@@ -96,8 +96,8 @@ public struct EisenhowerMatrixView: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
                 }
                 
-                // 2x2 Eisenhower Quadrants Canvas
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)], spacing: 14) {
+                // Eisenhower Quadrants List Blocks
+                VStack(spacing: 14) {
                     QuadrantDropZoneView(quadrant: .q1, tasks: viewModel.q1Tasks, viewModel: viewModel)
                     QuadrantDropZoneView(quadrant: .q2, tasks: viewModel.q2Tasks, viewModel: viewModel)
                     QuadrantDropZoneView(quadrant: .q3, tasks: viewModel.q3Tasks, viewModel: viewModel)

@@ -49,14 +49,12 @@ public struct StreakDetailSheetView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack(spacing: 8) {
-                        ZStack {
-                            Circle()
-                                .fill(Color.pomoloOrange.opacity(0.15))
-                                .frame(width: 28, height: 28)
-                            Image(systemName: "timer")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(Color.pomoloOrange)
-                        }
+                        Image("PomoloLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 28, height: 28)
+                            .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                            .shadow(color: Color.black.opacity(0.06), radius: 3, x: 0, y: 1)
                         Text("Pomolo")
                             .font(PomoloTypography.headlineSmall(16))
                             .fontWeight(.bold)

@@ -48,14 +48,12 @@ public struct OnboardingView: View {
             // Header Skip Button
             HStack {
                 HStack(spacing: 8) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.pomoloOrange.opacity(0.15))
-                            .frame(width: 32, height: 32)
-                        Image(systemName: "timer")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(Color.pomoloOrange)
-                    }
+                    Image("PomoloLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 32, height: 32)
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        .shadow(color: Color.black.opacity(0.06), radius: 3, x: 0, y: 1)
                     Text("Pomolo")
                         .font(PomoloTypography.headlineSmall(17))
                         .fontWeight(.bold)

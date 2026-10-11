@@ -8,7 +8,7 @@ public final class MatrixViewModel: ObservableObject {
     @Published public var q2Tasks: [TaskItem] = []
     @Published public var q3Tasks: [TaskItem] = []
     @Published public var q4Tasks: [TaskItem] = []
-    @Published public var isGridView: Bool = true
+    @Published public var isGridView: Bool = false
     @Published public var showAIToast: Bool = true
     @Published public var draggedTask: TaskItem? = nil
     @Published public var efficiencyIndex: Double = 78.0
