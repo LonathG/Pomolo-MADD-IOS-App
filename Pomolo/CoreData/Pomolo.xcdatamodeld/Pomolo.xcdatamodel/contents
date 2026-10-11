@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22000" systemVersion="23E224" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="TaskItem" representedClassName="TaskItem" syncable="YES">
+        <attribute name="cognitiveLoadScore" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="completedPomodoros" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="estimatedMinutes" optional="YES" attributeType="Integer 16" defaultValueString="25" usesScalarValueType="YES"/>
+        <attribute name="estimatedPomodoros" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isCompleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isFrog" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="matrixQuadrant" attributeType="String" defaultValueString="inbox"/>
+        <attribute name="orderIndex" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tag" optional="YES" attributeType="String"/>
+        <attribute name="taskDescription" optional="YES" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+    </entity>
+    <entity name="UserStats" representedClassName="UserStats" syncable="YES">
+        <attribute name="dailyStreak" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="efficiencyIndex" attributeType="Double" defaultValueString="78.0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="lastActiveDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="todayFocusMinutes" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="totalFrogsCompleted" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="totalPomodoroPoints" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+</model>
