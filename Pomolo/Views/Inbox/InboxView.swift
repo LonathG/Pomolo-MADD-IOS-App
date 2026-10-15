@@ -127,7 +127,7 @@ public struct InboxView: View {
                         Text("Smart Routing")
                             .font(PomoloTypography.labelCaps(11))
                             .foregroundColor(Color.pomoloTextPrimary)
-                        Text("\(viewModel.unsortedCount) tasks mapped to Matrix")
+                        Text(viewModel.unsortedCount == 0 ? "All tasks triaged to Matrix" : "\(viewModel.unsortedCount) tasks ready to triage")
                             .font(PomoloTypography.bodyMedium(12))
                             .foregroundColor(Color.pomoloTextSecondary)
                     }
@@ -147,11 +147,12 @@ public struct InboxView: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 7)
-                        .background(Color.pomoloOrange)
+                        .background(viewModel.unsortedCount == 0 ? Color.pomoloTextSecondary.opacity(0.3) : Color.pomoloOrange)
                         .clipShape(Capsule())
-                        .shadow(color: Color.pomoloOrange.opacity(0.3), radius: 6, x: 0, y: 2)
+                        .shadow(color: viewModel.unsortedCount == 0 ? Color.clear : Color.pomoloOrange.opacity(0.3), radius: 6, x: 0, y: 2)
                     }
                     .buttonStyle(ScaleButtonStyle())
+                    .disabled(viewModel.unsortedCount == 0)
                 }
                 .padding(12)
                 .pomoloCardStyle(cornerRadius: 18)

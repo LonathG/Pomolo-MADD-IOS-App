@@ -56,7 +56,7 @@ public struct EisenhowerMatrixView: View {
                 .padding(.horizontal, 4)
                 
                 // Smart Balance AI Banner
-                if viewModel.showAIToast {
+                if viewModel.showAIToast, let suggestion = viewModel.balanceSuggestion {
                     HStack(spacing: 12) {
                         ZStack {
                             Circle()
@@ -68,12 +68,13 @@ public struct EisenhowerMatrixView: View {
                         }
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Pomolo AI Analysis Ready")
+                            Text(suggestion.title)
                                 .font(PomoloTypography.headlineSmall(13))
                                 .foregroundColor(Color.pomoloTextPrimary)
-                            Text("2 tasks in Q1 could be delegated to save 1h 45m")
+                            Text(suggestion.explanation)
                                 .font(PomoloTypography.bodyMedium(11))
                                 .foregroundColor(Color.pomoloTextSecondary)
+                                .lineLimit(2)
                         }
                         
                         Spacer()
@@ -82,7 +83,7 @@ public struct EisenhowerMatrixView: View {
                             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                             viewModel.applyAIBalanceRecommendation()
                         } label: {
-                            Text("APPLY")
+                            Text(suggestion.actionButtonTitle)
                                 .font(PomoloTypography.labelCaps(11))
                                 .foregroundColor(Color.pomoloTextPrimary)
                                 .padding(.horizontal, 10)

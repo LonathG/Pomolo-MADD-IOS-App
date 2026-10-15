@@ -13,6 +13,8 @@ public final class MatrixViewModel: ObservableObject {
     @Published public var draggedTask: TaskItem? = nil
     @Published public var efficiencyIndex: Double = 78.0
     
+    @Published public var balanceSuggestion: AIBalanceSuggestion? = nil
+    
     private let coreDataManager = CoreDataManager.shared
     
     public init() {
@@ -26,6 +28,7 @@ public final class MatrixViewModel: ObservableObject {
             q3Tasks = coreDataManager.fetchTasks(for: .q3)
             q4Tasks = coreDataManager.fetchTasks(for: .q4)
             calculateEfficiencyIndex()
+            evaluateBalanceSuggestion()
         }
     }
     
@@ -62,15 +65,77 @@ public final class MatrixViewModel: ObservableObject {
     }
     
     public func applyAIBalanceRecommendation() {
-        if let delegatableTask = q1Tasks.first(where: { !$0.isCompleted && $0.estimatedMinutes < 30 }) {
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                coreDataManager.updateTaskQuadrant(task: delegatableTask, to: .q3)
-                reloadAllQuadrants()
-                showAIToast = false
-            }
-        } else {
+        guard let suggestion = balanceSuggestion else {
+            showAIToast = false
+            return
+        }
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+            coreDataManager.updateTaskQuadrant(task: suggestion.task, to: suggestion.targetQuadrant)
+            reloadAllQuadrants()
             showAIToast = false
         }
+    }
+    
+    private func evaluateBalanceSuggestion() {
+        let activeQ1 = q1Tasks.filter { !$0.isCompleted }
+        
+        // 1. Check if Q1 contains strategic/deep work tasks that should be in Q2 (Schedule)
+        for task in activeQ1 {
+            let proper = TaskViewModel.determineQuadrant(
+                title: task.wrappedTitle,
+                details: task.taskDescription,
+                tag: task.tag,
+                estimatedMinutes: Int(task.estimatedMinutes),
+                dueDate: task.dueDate,
+                isFrog: task.isFrog
+            )
+            if proper == .q2 {
+                balanceSuggestion = AIBalanceSuggestion(
+                    task: task,
+                    targetQuadrant: .q2,
+                    title: "Pomolo AI Balance Insight",
+                    explanation: "Move '\(task.wrappedTitle)' to Q2 Schedule to protect deep focus blocks.",
+                    actionButtonTitle: "SCHEDULE"
+                )
+                return
+            }
+        }
+        
+        // 2. Check if Q1 contains low-leverage routine tasks that can be delegated
+        for task in activeQ1 {
+            let proper = TaskViewModel.determineQuadrant(
+                title: task.wrappedTitle,
+                details: task.taskDescription,
+                tag: task.tag,
+                estimatedMinutes: Int(task.estimatedMinutes),
+                dueDate: task.dueDate,
+                isFrog: task.isFrog
+            )
+            if proper == .q3 {
+                balanceSuggestion = AIBalanceSuggestion(
+                    task: task,
+                    targetQuadrant: .q3,
+                    title: "Pomolo AI Balance Insight",
+                    explanation: "Delegate '\(task.wrappedTitle)' to save \(task.estimatedMinutes)m of peak energy.",
+                    actionButtonTitle: "DELEGATE"
+                )
+                return
+            }
+        }
+        
+        // 3. Check if Q1 is overloaded (> 2 tasks)
+        if activeQ1.count > 2, let nonCritical = activeQ1.last(where: { !($0.wrappedTitle.lowercased().contains("p0") || $0.wrappedTitle.lowercased().contains("blocker")) }) {
+            balanceSuggestion = AIBalanceSuggestion(
+                task: nonCritical,
+                targetQuadrant: .q2,
+                title: "Cognitive Load Balancing",
+                explanation: "Re-schedule '\(nonCritical.wrappedTitle)' to Q2 to keep Q1 focused on emergencies.",
+                actionButtonTitle: "SCHEDULE"
+            )
+            return
+        }
+        
+        balanceSuggestion = nil
     }
     
     private func calculateEfficiencyIndex() {
@@ -78,4 +143,13 @@ public final class MatrixViewModel: ObservableObject {
         let total = Double(max(1, q1Tasks.count + q2Tasks.count + q3Tasks.count + q4Tasks.count))
         efficiencyIndex = min(100.0, round((highLeverageCount / total) * 100.0))
     }
+}
+
+public struct AIBalanceSuggestion: Identifiable {
+    public var id: UUID { task.wrappedId }
+    public let task: TaskItem
+    public let targetQuadrant: MatrixQuadrant
+    public let title: String
+    public let explanation: String
+    public let actionButtonTitle: String
 }
